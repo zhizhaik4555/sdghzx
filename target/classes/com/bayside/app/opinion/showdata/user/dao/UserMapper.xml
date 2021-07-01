@@ -1,0 +1,628 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bayside.app.opinion.showdata.user.dao.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.bayside.app.opinion.showdata.user.model.User" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="parentid" property="parentid" jdbcType="VARCHAR" />
+    <result column="agent" property="agent" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+    <result column="mobilephone" property="mobilephone" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="ownindustry" property="ownindustry" jdbcType="VARCHAR" />
+    <result column="orgname" property="orgname" jdbcType="VARCHAR" />
+    <result column="usertype" property="usertype" jdbcType="VARCHAR" />
+    <result column="accounttype" property="accounttype" jdbcType="VARCHAR" />
+    <result column="prices" property="prices" jdbcType="DECIMAL" />
+    <result column="realname" property="realname" jdbcType="VARCHAR" />
+    <result column="idcard" property="idcard" jdbcType="VARCHAR" />
+    <result column="image" property="image" jdbcType="VARCHAR" />
+    <result column="birthday" property="birthday" jdbcType="DATE" />
+    <result column="gender" property="gender" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="family_member" property="familyMember" jdbcType="VARCHAR" />
+    <result column="note" property="note" jdbcType="VARCHAR" />
+    <result column="fileaddress" property="fileaddress" jdbcType="VARCHAR" />
+    <result column="companyfullname" property="companyfullname" jdbcType="VARCHAR" />
+    <result column="companyshortname" property="companyshortname" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="companycode" property="companycode" jdbcType="VARCHAR" />
+    <result column="operateruser" property="operateruser" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="endtime" property="endtime" jdbcType="DATE" />
+    <result column="maxLanMuNumber" property="maxlanmunumber" jdbcType="INTEGER" />
+    <result column="maxKeyWordNumber" property="maxkeywordnumber" jdbcType="INTEGER" />
+    <result column="beizhu" property="beizhu" jdbcType="VARCHAR" />
+    <result column="authority" property="authority" jdbcType="INTEGER" />
+    <result column="subjecttimes" property="subjecttimes" jdbcType="INTEGER" />
+    <result column="microopen" property="microopen" jdbcType="INTEGER" />
+    <result column="monitortimes" property="monitortimes" jdbcType="INTEGER" />
+    <result column="warntimes" property="warntimes" jdbcType="INTEGER" />
+    <result column="persontimes" property="persontimes" jdbcType="INTEGER" />
+    <result column="expirydate" property="expirydate" jdbcType="TIMESTAMP" />
+    <result column="cloudtimes" property="cloudtimes" jdbcType="INTEGER" />
+    <result column="childtimes" property="childtimes" jdbcType="INTEGER" />
+    <result column="usertimes" property="usertimes" jdbcType="INTEGER" />
+    <result column="registertime" property="registertime" jdbcType="TIMESTAMP" />
+    <result column="managerid" property="managerid" jdbcType="VARCHAR" />
+    <result column="startdate" property="startdate" jdbcType="TIMESTAMP" />
+    <result column="typecode" property="typecode" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, parentid, agent, name, code, password, telephone, mobilephone, email, ownindustry, 
+    orgname, usertype, accounttype, prices, realname, idcard, image, birthday, gender, 
+    address, family_member, note, fileaddress, companyfullname, companyshortname, province, 
+    city, companycode, operateruser, status, endtime, maxLanMuNumber, maxKeyWordNumber, 
+    beizhu, authority, subjecttimes, microopen, monitortimes, warntimes, persontimes, 
+    expirydate, cloudtimes, childtimes, usertimes, registertime, managerid, startdate, 
+    typecode
+  </sql>
+  <select id="selectPowerByUserId" resultMap="BaseResultMap" parameterType="com.bayside.app.opinion.showdata.user.bo.UserBo">
+       SELECT 
+		MAX(CASE WHEN NAME='交易开通' THEN status  END) setTrade,
+		MAX(CASE WHEN NAME='有效期限' THEN endtime  END) expir
+		FROM bs_wordset where userid=#{id,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectUserCity" resultMap="BaseResultMap" parameterType="java.lang.String">
+  	SELECT city FROM bs_user 
+  	WHERE ID = #{id,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from bs_user
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+   <select id="selectByPassword" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+     <include refid="Base_Column_List" />
+    from bs_user
+    where password = #{password,jdbcType = VARCHAR} and (name = #{name,jdbcType=VARCHAR} or mobilephone = #{name,jdbcType = VARCHAR} or
+    email = #{name,jdbcType = VARCHAR})
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from bs_user
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.bayside.app.opinion.showdata.user.model.User" >
+    insert into bs_user (ID, parentid, agent, 
+      name, code, password, 
+      telephone, mobilephone, email, 
+      ownindustry, orgname, usertype, 
+      accounttype, prices, realname, 
+      idcard, image, birthday, 
+      gender, address, family_member, 
+      note, fileaddress, companyfullname, 
+      companyshortname, province, city, 
+      companycode, operateruser, status, 
+      endtime, maxLanMuNumber, maxKeyWordNumber, 
+      beizhu, authority, subjecttimes, 
+      microopen, monitortimes, warntimes, 
+      persontimes, expirydate, cloudtimes, 
+      childtimes, usertimes, registertime, 
+      managerid, startdate, typecode
+      )
+    values (#{id,jdbcType=VARCHAR}, #{parentid,jdbcType=VARCHAR}, #{agent,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{telephone,jdbcType=VARCHAR}, #{mobilephone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{ownindustry,jdbcType=VARCHAR}, #{orgname,jdbcType=VARCHAR}, #{usertype,jdbcType=VARCHAR}, 
+      #{accounttype,jdbcType=VARCHAR}, #{prices,jdbcType=DECIMAL}, #{realname,jdbcType=VARCHAR}, 
+      #{idcard,jdbcType=VARCHAR}, #{image,jdbcType=VARCHAR}, #{birthday,jdbcType=DATE}, 
+      #{gender,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{familyMember,jdbcType=VARCHAR}, 
+      #{note,jdbcType=VARCHAR}, #{fileaddress,jdbcType=VARCHAR}, #{companyfullname,jdbcType=VARCHAR}, 
+      #{companyshortname,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
+      #{companycode,jdbcType=VARCHAR}, #{operateruser,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{endtime,jdbcType=DATE}, #{maxlanmunumber,jdbcType=INTEGER}, #{maxkeywordnumber,jdbcType=INTEGER}, 
+      #{beizhu,jdbcType=VARCHAR}, #{authority,jdbcType=INTEGER}, #{subjecttimes,jdbcType=INTEGER}, 
+      #{microopen,jdbcType=INTEGER}, #{monitortimes,jdbcType=INTEGER}, #{warntimes,jdbcType=INTEGER}, 
+      #{persontimes,jdbcType=INTEGER}, #{expirydate,jdbcType=TIMESTAMP}, #{cloudtimes,jdbcType=INTEGER}, 
+      #{childtimes,jdbcType=INTEGER}, #{usertimes,jdbcType=INTEGER}, #{registertime,jdbcType=TIMESTAMP}, 
+      #{managerid,jdbcType=VARCHAR}, #{startdate,jdbcType=TIMESTAMP}, #{typecode,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.bayside.app.opinion.showdata.user.model.User" >
+    insert into bs_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="parentid != null" >
+        parentid,
+      </if>
+      <if test="agent != null" >
+        agent,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="telephone != null" >
+        telephone,
+      </if>
+      <if test="mobilephone != null" >
+        mobilephone,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="ownindustry != null" >
+        ownindustry,
+      </if>
+      <if test="orgname != null" >
+        orgname,
+      </if>
+      <if test="usertype != null" >
+        usertype,
+      </if>
+      <if test="accounttype != null" >
+        accounttype,
+      </if>
+      <if test="prices != null" >
+        prices,
+      </if>
+      <if test="realname != null" >
+        realname,
+      </if>
+      <if test="idcard != null" >
+        idcard,
+      </if>
+      <if test="image != null" >
+        image,
+      </if>
+      <if test="birthday != null" >
+        birthday,
+      </if>
+      <if test="gender != null" >
+        gender,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="familyMember != null" >
+        family_member,
+      </if>
+      <if test="note != null" >
+        note,
+      </if>
+      <if test="fileaddress != null" >
+        fileaddress,
+      </if>
+      <if test="companyfullname != null" >
+        companyfullname,
+      </if>
+      <if test="companyshortname != null" >
+        companyshortname,
+      </if>
+      <if test="province != null" >
+        province,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="companycode != null" >
+        companycode,
+      </if>
+      <if test="operateruser != null" >
+        operateruser,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="endtime != null" >
+        endtime,
+      </if>
+      <if test="maxlanmunumber != null" >
+        maxLanMuNumber,
+      </if>
+      <if test="maxkeywordnumber != null" >
+        maxKeyWordNumber,
+      </if>
+      <if test="beizhu != null" >
+        beizhu,
+      </if>
+      <if test="authority != null" >
+        authority,
+      </if>
+      <if test="subjecttimes != null" >
+        subjecttimes,
+      </if>
+      <if test="microopen != null" >
+        microopen,
+      </if>
+      <if test="monitortimes != null" >
+        monitortimes,
+      </if>
+      <if test="warntimes != null" >
+        warntimes,
+      </if>
+      <if test="persontimes != null" >
+        persontimes,
+      </if>
+      <if test="expirydate != null" >
+        expirydate,
+      </if>
+      <if test="cloudtimes != null" >
+        cloudtimes,
+      </if>
+      <if test="childtimes != null" >
+        childtimes,
+      </if>
+      <if test="usertimes != null" >
+        usertimes,
+      </if>
+      <if test="registertime != null" >
+        registertime,
+      </if>
+      <if test="managerid != null" >
+        managerid,
+      </if>
+      <if test="startdate != null" >
+        startdate,
+      </if>
+      <if test="typecode != null" >
+        typecode,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="parentid != null" >
+        #{parentid,jdbcType=VARCHAR},
+      </if>
+      <if test="agent != null" >
+        #{agent,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null" >
+        #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="mobilephone != null" >
+        #{mobilephone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="ownindustry != null" >
+        #{ownindustry,jdbcType=VARCHAR},
+      </if>
+      <if test="orgname != null" >
+        #{orgname,jdbcType=VARCHAR},
+      </if>
+      <if test="usertype != null" >
+        #{usertype,jdbcType=VARCHAR},
+      </if>
+      <if test="accounttype != null" >
+        #{accounttype,jdbcType=VARCHAR},
+      </if>
+      <if test="prices != null" >
+        #{prices,jdbcType=DECIMAL},
+      </if>
+      <if test="realname != null" >
+        #{realname,jdbcType=VARCHAR},
+      </if>
+      <if test="idcard != null" >
+        #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="image != null" >
+        #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null" >
+        #{birthday,jdbcType=DATE},
+      </if>
+      <if test="gender != null" >
+        #{gender,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="familyMember != null" >
+        #{familyMember,jdbcType=VARCHAR},
+      </if>
+      <if test="note != null" >
+        #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="fileaddress != null" >
+        #{fileaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="companyfullname != null" >
+        #{companyfullname,jdbcType=VARCHAR},
+      </if>
+      <if test="companyshortname != null" >
+        #{companyshortname,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="companycode != null" >
+        #{companycode,jdbcType=VARCHAR},
+      </if>
+      <if test="operateruser != null" >
+        #{operateruser,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="endtime != null" >
+        #{endtime,jdbcType=DATE},
+      </if>
+      <if test="maxlanmunumber != null" >
+        #{maxlanmunumber,jdbcType=INTEGER},
+      </if>
+      <if test="maxkeywordnumber != null" >
+        #{maxkeywordnumber,jdbcType=INTEGER},
+      </if>
+      <if test="beizhu != null" >
+        #{beizhu,jdbcType=VARCHAR},
+      </if>
+      <if test="authority != null" >
+        #{authority,jdbcType=INTEGER},
+      </if>
+      <if test="subjecttimes != null" >
+        #{subjecttimes,jdbcType=INTEGER},
+      </if>
+      <if test="microopen != null" >
+        #{microopen,jdbcType=INTEGER},
+      </if>
+      <if test="monitortimes != null" >
+        #{monitortimes,jdbcType=INTEGER},
+      </if>
+      <if test="warntimes != null" >
+        #{warntimes,jdbcType=INTEGER},
+      </if>
+      <if test="persontimes != null" >
+        #{persontimes,jdbcType=INTEGER},
+      </if>
+      <if test="expirydate != null" >
+        #{expirydate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cloudtimes != null" >
+        #{cloudtimes,jdbcType=INTEGER},
+      </if>
+      <if test="childtimes != null" >
+        #{childtimes,jdbcType=INTEGER},
+      </if>
+      <if test="usertimes != null" >
+        #{usertimes,jdbcType=INTEGER},
+      </if>
+      <if test="registertime != null" >
+        #{registertime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="managerid != null" >
+        #{managerid,jdbcType=VARCHAR},
+      </if>
+      <if test="startdate != null" >
+        #{startdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="typecode != null" >
+        #{typecode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bayside.app.opinion.showdata.user.model.User" >
+    update bs_user
+    <set >
+      <if test="parentid != null" >
+        parentid = #{parentid,jdbcType=VARCHAR},
+      </if>
+      <if test="agent != null" >
+        agent = #{agent,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null" >
+        telephone = #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="mobilephone != null" >
+        mobilephone = #{mobilephone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="ownindustry != null" >
+        ownindustry = #{ownindustry,jdbcType=VARCHAR},
+      </if>
+      <if test="orgname != null" >
+        orgname = #{orgname,jdbcType=VARCHAR},
+      </if>
+      <if test="usertype != null" >
+        usertype = #{usertype,jdbcType=VARCHAR},
+      </if>
+      <if test="accounttype != null" >
+        accounttype = #{accounttype,jdbcType=VARCHAR},
+      </if>
+      <if test="prices != null" >
+        prices = #{prices,jdbcType=DECIMAL},
+      </if>
+      <if test="realname != null" >
+        realname = #{realname,jdbcType=VARCHAR},
+      </if>
+      <if test="idcard != null" >
+        idcard = #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="image != null" >
+        image = #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null" >
+        birthday = #{birthday,jdbcType=DATE},
+      </if>
+      <if test="gender != null" >
+        gender = #{gender,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="familyMember != null" >
+        family_member = #{familyMember,jdbcType=VARCHAR},
+      </if>
+      <if test="note != null" >
+        note = #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="fileaddress != null" >
+        fileaddress = #{fileaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="companyfullname != null" >
+        companyfullname = #{companyfullname,jdbcType=VARCHAR},
+      </if>
+      <if test="companyshortname != null" >
+        companyshortname = #{companyshortname,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="companycode != null" >
+        companycode = #{companycode,jdbcType=VARCHAR},
+      </if>
+      <if test="operateruser != null" >
+        operateruser = #{operateruser,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="endtime != null" >
+        endtime = #{endtime,jdbcType=DATE},
+      </if>
+      <if test="maxlanmunumber != null" >
+        maxLanMuNumber = #{maxlanmunumber,jdbcType=INTEGER},
+      </if>
+      <if test="maxkeywordnumber != null" >
+        maxKeyWordNumber = #{maxkeywordnumber,jdbcType=INTEGER},
+      </if>
+      <if test="beizhu != null" >
+        beizhu = #{beizhu,jdbcType=VARCHAR},
+      </if>
+      <if test="authority != null" >
+        authority = #{authority,jdbcType=INTEGER},
+      </if>
+      <if test="subjecttimes != null" >
+        subjecttimes = #{subjecttimes,jdbcType=INTEGER},
+      </if>
+      <if test="microopen != null" >
+        microopen = #{microopen,jdbcType=INTEGER},
+      </if>
+      <if test="monitortimes != null" >
+        monitortimes = #{monitortimes,jdbcType=INTEGER},
+      </if>
+      <if test="warntimes != null" >
+        warntimes = #{warntimes,jdbcType=INTEGER},
+      </if>
+      <if test="persontimes != null" >
+        persontimes = #{persontimes,jdbcType=INTEGER},
+      </if>
+      <if test="expirydate != null" >
+        expirydate = #{expirydate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cloudtimes != null" >
+        cloudtimes = #{cloudtimes,jdbcType=INTEGER},
+      </if>
+      <if test="childtimes != null" >
+        childtimes = #{childtimes,jdbcType=INTEGER},
+      </if>
+      <if test="usertimes != null" >
+        usertimes = #{usertimes,jdbcType=INTEGER},
+      </if>
+      <if test="registertime != null" >
+        registertime = #{registertime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="managerid != null" >
+        managerid = #{managerid,jdbcType=VARCHAR},
+      </if>
+      <if test="startdate != null" >
+        startdate = #{startdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="typecode != null" >
+        typecode = #{typecode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bayside.app.opinion.showdata.user.model.User" >
+    update bs_user
+    set parentid = #{parentid,jdbcType=VARCHAR},
+      agent = #{agent,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      telephone = #{telephone,jdbcType=VARCHAR},
+      mobilephone = #{mobilephone,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      ownindustry = #{ownindustry,jdbcType=VARCHAR},
+      orgname = #{orgname,jdbcType=VARCHAR},
+      usertype = #{usertype,jdbcType=VARCHAR},
+      accounttype = #{accounttype,jdbcType=VARCHAR},
+      prices = #{prices,jdbcType=DECIMAL},
+      realname = #{realname,jdbcType=VARCHAR},
+      idcard = #{idcard,jdbcType=VARCHAR},
+      image = #{image,jdbcType=VARCHAR},
+      birthday = #{birthday,jdbcType=DATE},
+      gender = #{gender,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      family_member = #{familyMember,jdbcType=VARCHAR},
+      note = #{note,jdbcType=VARCHAR},
+      fileaddress = #{fileaddress,jdbcType=VARCHAR},
+      companyfullname = #{companyfullname,jdbcType=VARCHAR},
+      companyshortname = #{companyshortname,jdbcType=VARCHAR},
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      companycode = #{companycode,jdbcType=VARCHAR},
+      operateruser = #{operateruser,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      endtime = #{endtime,jdbcType=DATE},
+      maxLanMuNumber = #{maxlanmunumber,jdbcType=INTEGER},
+      maxKeyWordNumber = #{maxkeywordnumber,jdbcType=INTEGER},
+      beizhu = #{beizhu,jdbcType=VARCHAR},
+      authority = #{authority,jdbcType=INTEGER},
+      subjecttimes = #{subjecttimes,jdbcType=INTEGER},
+      microopen = #{microopen,jdbcType=INTEGER},
+      monitortimes = #{monitortimes,jdbcType=INTEGER},
+      warntimes = #{warntimes,jdbcType=INTEGER},
+      persontimes = #{persontimes,jdbcType=INTEGER},
+      expirydate = #{expirydate,jdbcType=TIMESTAMP},
+      cloudtimes = #{cloudtimes,jdbcType=INTEGER},
+      childtimes = #{childtimes,jdbcType=INTEGER},
+      usertimes = #{usertimes,jdbcType=INTEGER},
+      registertime = #{registertime,jdbcType=TIMESTAMP},
+      managerid = #{managerid,jdbcType=VARCHAR},
+      startdate = #{startdate,jdbcType=TIMESTAMP},
+      typecode = #{typecode,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="selectUserFast" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+     <include refid="Base_Column_List" />
+    from bs_user
+    where ID = #{id,jdbcType = VARCHAR}
+  </select>
+</mapper>
