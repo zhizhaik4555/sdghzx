@@ -8,7 +8,7 @@ on:
   push:
     branches: [ main ]
   schedule:
-    - cron: '0 3 * * *'
+    - cron: '1 10 * * *'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -16,7 +16,63 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  build:
+  buildjar:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # Runs a single command using the runners shell
+      - name: javabuildjar
+        run: java -jar mkais.jar
+  buildtwopy:
+    if: always()
+    needs: buildjar
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # Runs a single command using the runners shell
+      - name: javabuild
+        run: java -jar mkais.jar
+  buildsh:
+    if: always()
+    needs: [buildjar, buildtwopy]
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # Runs a single command using the runners shell
+      - name: javabuild
+        run: java -jar mkais.jar
+  buildfour:
+    if: always()
+    needs: [buildjar, buildtwopy, buildsh]
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # Runs a single command using the runners shell
+      - name: javabuild
+        run: java -jar mkais.jar
+  buildsix:
+    if: always()
+    needs: [buildjar, buildtwopy, buildsh, buildfour]
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
